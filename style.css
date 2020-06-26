@@ -1,0 +1,22 @@
+body {
+	color: #b0baba;
+	background-color: #092a33;
+	font-family: sans-serif;
+	text-align: center;
+}
+
+body header {
+	background-color: #03222a;
+}
+
+body header .name {
+	font-size: 3em;
+}
+
+body header .description {
+	font-size: 1.5em;
+}
+
+body main {
+	margin: 20px;
+}
