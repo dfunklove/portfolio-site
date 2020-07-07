@@ -9,6 +9,7 @@ body {
 body header, footer {
 	background-color: #03222a;
 	padding: 20px;
+	width: 100%;
 }
 
 body header {
@@ -45,7 +46,8 @@ h2 {
 }
 
 .tall {
-	height: 3em;
+	height: 1em;
+	padding-top: 100px
 }
 
 div.never {
@@ -95,10 +97,8 @@ a:visited {
 	list-style-type: none
 }
 
-.outside {
-	list-style-position: outside;
-}
-
-.rotate45 {
-	transform: rotate(45deg);
+.emphatic {
+	font-style: italic;
+	font-size: 1.5em;
+	color: orange;
 }
