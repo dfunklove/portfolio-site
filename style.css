@@ -27,8 +27,25 @@ body header .description {
 	font-size: 1.5em;
 }
 
-div.spacey {
+header * {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+h1 {
+	color: #2aa198;
+}
+
+h2 {
+	color: #b58900;
+}
+
+.spacey {
 	margin: 20px;
+}
+
+.tall {
+	height: 3em;
 }
 
 div.never {
@@ -58,10 +75,30 @@ a {
 	font-weight: bold;
 }
 
+a:link {
+	color: cyan;
+}
+
 a:hover {
 	color: magenta;
 }
 
+a:visited {
+	color: limegreen;
+}
+
 .center {
 	text-align: center;
+}
+
+.nodec {
+	list-style-type: none
+}
+
+.outside {
+	list-style-position: outside;
+}
+
+.rotate45 {
+	transform: rotate(45deg);
 }
