@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Daniel Lovette | Software Developer</title>
+
+    <!-- Display the same in all browsers.  Must be first stylesheet. -->
     <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet" type="text/css" />
+
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
@@ -13,8 +16,7 @@
   		<img src="images/oldpc.png" width="100" alt="8 bit computer" />
   		<h2>Software Developer</h2>
   	</header>
-  	<main>
-  		<div class="center-contents">
+  	<main class="center-contents">
   		<div>
   			<img src="images/profile_pic.jpg" width="400" alt="profile picture">
   		</div>
@@ -22,6 +24,8 @@
   			<h6 class="hidden">Down the Rabbit Hole</h6>
 	  		<section id="intro">
 	  			<h2>A Strange Introduction</h2>
+
+				<!-- Place text on the left side of a column which is centered -->
 		  		<div class="contents-left">
 		  			Who is this guy?
 		  			<ul>
@@ -44,20 +48,24 @@
 	  			<h2>Something About That Guy</h2>
 	  			<div class="contents-left">
 		  			How does he describe himself?
+		  			<!-- ul nests inside li -->
 		  			<ul>
 		  				<li>Enjoys creating delightful experiences for all</li>
-		  				<li>Loves to sink his shiny teeth into a good technical problem</li>
+		  				<li>Loves to sink his shiny teeth into a good technical problem
 		  					<ul>
 		  						<li>Web Applications</li>
 		  						<li>Databases</li>
 		  						<li>APIs</li>
 		  					</ul>
-		  				<li>It's like a good MLT</li>
+		  				</li>
+		  				<!-- Playing with the list format -->
+		  				<li>It's like a good MLT
 		  					<ul>
 		  						<li>Mutton</li>
 		  						<li>Lettuce</li>
 		  						<li>Tomato</li>
 		  					</ul>
+		  				</li>
 		  				<li>When the mutton is very lean...</li>
 		  			</ul>
 
@@ -66,20 +74,23 @@
 
 		  			Anything else?
 
-		  			<ul><li>He enjoys geeking out over</li>
-		  				<ul>
-		  					<li>Vintage synthesizers</li>
-		  					<li>Polyrhythms</li>
-		  					<li>Hypnotic textures</li>
-		  					<li>And other balderdash!</li>
-		  				</ul>
+		  			<ul>
+		  				<li>He enjoys geeking out over
+			  				<ul>
+			  					<li>Vintage synthesizers</li>
+			  					<li>Polyrhythms</li>
+			  					<li>Hypnotic textures</li>
+			  					<li>And other balderdash!</li>
+			  				</ul>
+		  				</li>
 		  			</ul>
-
 	  			</div>
 	  		</section>
 	  		<hr>
 	  		<section id="contact">
 	  			<h2>Where Can I Find A Coder Like That?</h2>
+	  			
+	  			<!-- I kind of hate the way OL looks here, but it's required to include in the page. -->
 	  			<ol>
   					<li class="spacey"><a href="https://www.linkedin.com/in/daniel-lovette-35571766/">LinkedIn</a></li>
   					<li class="spacey"><a href="https://github.com/dfunklove">GitHub</a></li>
@@ -90,7 +101,6 @@
   				<img src="images/hitchhiker.jpg" width="100" alt="thumb in space" />
 	  		</section>
   		</article>
-  		</div>
   	</main>
   	<footer>&copy; 2020 Evil Corporation, Ltd.</footer>
   </body>

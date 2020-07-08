@@ -1,3 +1,4 @@
+/* Colors follow the Solarized theme, popular with coders */
 body {
 	color: #b0baba;
 	background-color: #092a33;
@@ -7,26 +8,21 @@ body {
 	width: 100%;
 }
 
+/* Header should fill screen width on mobile, but it does not. */
 body header, footer {
 	background-color: #03222a;
 	padding: 20px;
 	width: 100%;
 }
 
+/* Fancy font in header */
 body header {
 	font-family: "Trebuchet MS",sans-serif;
+	margin-bottom: 20px;
 }
 
 body footer {
 	margin-top: 20px;
-}
-
-body header .name {
-	font-size: 3em;
-}
-
-body header .description {
-	font-size: 1.5em;
 }
 
 header * {
@@ -42,6 +38,7 @@ h2 {
 	color: #b58900;
 }
 
+/* Extra space around links */
 .spacey {
 	margin: 20px;
 }
@@ -51,12 +48,7 @@ h2 {
 	padding-top: 100px
 }
 
-div.never {
-	border-style: solid;
-	border-width: 1px;
-	border-color: white;
-}
-
+/* Place text on the left side of a column which is centered */
 div.contents-left {
 	margin: 20px;
 	text-align: left;
@@ -73,6 +65,7 @@ img {
 	margin: 20px;
 }
 
+/* Make links bigger */
 a {
 	font-size: 1.25em;
 	font-weight: bold;
