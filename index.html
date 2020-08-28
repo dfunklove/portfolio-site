@@ -6,22 +6,32 @@
       lang="en-US">
   <head profile="http://www.w3.org/2005/10/profile">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daniel Lovette | Software Developer</title>
 
     <!-- Display the same in all browsers.  Must be first stylesheet. -->
     <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet" type="text/css" />
 
+		<link rel="stylesheet" id="simple-line-icons-css" href="/css/simple-line-icons/simple-line-icons.min.css" type="text/css" media="all">
     <link href="/css/wordpress.css" rel="stylesheet" type="text/css" />
 		<link href="/css/oceanwp.css" rel="stylesheet" type="text/css" />
 		<link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
-  </head>
-  <body class="home">
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script> 
+		<script type="text/javascript" src="/js/imagesloaded.min.js"></script> 
+		<script type="text/javascript">
+			/* <![CDATA[ */
+			var oceanwpLocalize = {"isRTL":"","menuSearchStyle":"drop_down","sidrSource":"#sidr-close, #site-navigation","sidrDisplace":"1","sidrSide":"left","sidrDropdownTarget":"link","verticalHeaderTarget":"link","customSelects":".woocommerce-ordering .orderby, #dropdown_product_cat, .widget_categories select, .widget_archive select, .single-product .variations_form .variations select","ajax_url":"https:\/\/johnakhilomen.com\/wp-admin\/admin-ajax.php"};
+			/* ]]> */
+		</script>
+		<script type="text/javascript" src="/js/oceanwp.js"></script> 
+	</head>
+  <body class="home page-template-default page page-id-75 wp-custom-logo wp-embed-responsive oceanwp-theme sidebar-mobile default-breakpoint has-sidebar content-right-sidebar has-topbar has-breadcrumbs elementor-default">
 		<div id="outer-wrap" class="site clr">
 			<div id="wrap" class="clr">
 				<div id="top-bar-wrap" class="clr"></div>
 
-  	<header id="site-header" class="minimal-header clr">
+  	<header id="site-header" class="minimal-header clr" data-height="74" role="banner">
 			<div id="site-header-inner" class="container clr">
 				<div id="site-logo" class="clr">
 					<div id="site-logo-inner" class="clr">
@@ -45,23 +55,17 @@
 						</ul>
 					</nav>
 				</div>
+				<div class="oceanwp-mobile-menu-icon clr mobile-right">
+					<a href="#" class="mobile-menu" aria-label="Mobile Menu">
+						<svg class="svg-inline--fa fa-bars fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+							<path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path>
+						</svg>
+						<!-- <i class="fa fa-bars" aria-hidden="true"></i> --> <span class="oceanwp-text">Menu</span>
+					</a>
+				</div>
 			</div>
 		</header>
 		<div id="sidr" class="sidr left" style="transition: left 0.3s ease 0s;">
-			<div class="sidr-inner">
-				<a href="#" class="sidr-class-toggle-sidr-close" aria-label="Close mobile Menu"> <i class="sidr-class-icon icon-close" aria-hidden="true"></i><span class="sidr-class-close-text">Close Menu</span> 
-				</a>
-			</div>
-			<div class="sidr-inner">
-				<ul id="sidr-id-menu-default-menu" class="sidr-class-main-menu sidr-class-dropdown-menu sidr-class-sf-menu">
-					<li id="sidr-id-menu-item-149" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-149"><a href="/resume/" class="sidr-class-menu-link"><span class="sidr-class-text-wrap">Resume</span></a>
-					</li>
-					<li id="sidr-id-menu-item-112" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-112"><a href="/portfolio/" class="sidr-class-menu-link"><span class="sidr-class-text-wrap">Portfolio</span></a>
-					</li>
-					<li id="sidr-id-menu-item-113" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-113"><a href="/hire/" class="sidr-class-menu-link"><span class="sidr-class-text-wrap">Hire me</span></a>
-					</li>
-				</ul>
-			</div>
 		</div>
   	<main id="main" class="site-main clr">
 			<header class="page-header" clr>
