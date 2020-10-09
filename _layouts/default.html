@@ -5,7 +5,7 @@
       xml:lang="en-US"
       lang="en-US">
   <head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="utf-8">
+		<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
 			{% if page.is_home == true %}
@@ -15,6 +15,9 @@
 				{{ page.title }} &ndash; Daniel Lovette
 			{% endif %}
 		</title>
+		{% if page.center_title == true %}
+			{% assign home_class = "home" %}
+		{% endif %}
 
     <!-- Display the same in all browsers.  Must be first stylesheet. -->
     <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet" type="text/css" />
