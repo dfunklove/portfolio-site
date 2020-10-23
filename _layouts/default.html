@@ -18,6 +18,11 @@
 		{% if page.center_title == true %}
 			{% assign home_class = "home" %}
 		{% endif %}
+		{% if page.hide_sidebar == true %}
+			{% assign content_area_class = "" %}
+		{% else %}
+			{% assign content_area_class = "content-area" %}
+		{% endif %}
 
     <!-- Display the same in all browsers.  Must be first stylesheet. -->
     <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet" type="text/css" />
@@ -84,13 +89,14 @@
 				</div>
 			</header>
 			<div id="content-wrap" class="container">
-				<div id="primary" class="content-area">
+				<div id="primary" class="{{ content_area_class }}">
 					<div id="content" class="site-content">
 						<article class="single-page-article">
 							{{ content }}
 						</article>
 					</div>
 				</div>
+				{% if page.hide_sidebar != true %}
 				<aside id="right-sidebar" class="sidebar-container sidebar-primary widget-area" role="complementary">
 					<div id="right-sidebar-inner">
 						<div class="sidebar-box widget_rrtc_icon_text_widget">
@@ -129,6 +135,7 @@
 						</div>
 					</div>
 				</aside>
+				{% endif %}
 			</div>
 
   	</main>
