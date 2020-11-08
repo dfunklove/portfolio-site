@@ -1,0 +1,89 @@
+---
+layout: default
+title: Development Log for Complete Discography
+---
+
+<h2>Motivation</h2>
+<p>I wanted to be able to quickly find all albums by a certain artist who likes to record under many different names.</p>
+
+<h2>Goals</h2>
+<ol>
+	<li>Provide a web application where anyone can enter an artist's name and get a list of albums they have released with all of their different bands, groups, and/or aliases.</li>
+	<li>Demonstrate the use of Python to scrape data from a webpage.</li>
+</ol>
+
+<h2>Design Constraints</h2>
+<ol>
+<li>
+<h3>Responsiveness</h3>
+<p>The app should respond quickly to user input, and feel snappy to use.</p>
+</li>
+
+<li>
+<h3>Accuracy</h3>
+<p>The data itself must be as accurate as possible, up to the standards set by the best music sites.</p>
+</li>
+
+<li>
+<h3>Simplicity</h3>
+<p>Keep the design as simple as possible within the client/server paradigm.</p>
+</li>
+</ol>
+
+<h2>Technologies Used</h2>
+<ul>
+	<li>Python</li>
+	<li>Web Scraping</li>
+	<li>WebSockets</li>
+	<li>Socket.IO</li>
+	<li>Eventlet</li>
+	<li>Flask</li>
+	<li>Javascript</li>
+</ul>
+
+<h2>Design Choices</h2>
+<h3>Overall Architecture</h3>
+<p>One of the goals of this project was to demonstrate my use of Python so that clients can be satisfied as to my level of skill with the language.  This led to the client/server design.  The server side is a Python app which retrieves data from Discogs.com and serves it over a REST API in Flask.  The client is Javascript/HTML.  The client and server interact using WebSockets.  Now let's break it down piece by piece.</p>
+
+<h3>Data Source</h3>
+<p>I chose <a href="https://discogs.com">Discogs</a> for my data source because I consider them a dependable and respected source of data covering recorded music.  I also knew they had a public API.</p>
+
+<h3>Web Scraping</h3>
+<p>I started out scraping the Discogs website because I considered this the simplest solution.  I figured it would be the quickest way to get a proof of concept up and running in pure Python.  It was easy enough to get the data I needed using the Requests and BeautifulSoup libraries.</p>
+
+<p>Then I decided to make use of the Discogs API, thinking this was the proper way to get the data.  I figured most web pages are not meant for use by scrapers, and the API would be more stable and reliable.  However, this turned out to be a huge mistake.</p>
+
+<p>The problem is that the data provided by Discogs API is not nearly as useful as the data on their website.  Whereas the site returns the most relevant results on the first page, the API spreads the same data over many pages, with no way to narrow the search.  So I found myself having to make many requests to get all the data, then take more time to filter down to the results I wanted.  Eventually I gave up and returned to scraping, which is the result you see today.  The website may not be as stable as the API, but it is far more useful.  I'm content to get the results I need today, and make changes down the line as needed.</p>
+
+<h3>Flask</h3>
+<p>I chose Flask because it seems to be the most well-adopted, simple and robust tool for creating a REST API in Python.  It was easy to setup and never gave me any problems.</p>
+
+<h3>WebSockets</h3>
+<p>Why websockets?  In short, to provide greater responsiveness to users.  When you search for an artist on Complete Discography, the back end makes several requests:</p>
+
+<ol>
+	<li>Get a list of albums recorded by the artist under their own name</li>
+	<li>Get a list of groups the artist joined</li>
+	<li>Get a separate album list for each group</li>
+</ol>
+
+<p>All this takes time, easily 10-30 seconds.  But the first list comes back fast.  So, what to do?  I had just heard about websockets, and how they can allow a gradual flow of data from server to client, iterative over monolithic.  I decided to give it a try.</p>
+
+<p>I had been using Flask for my Python REST API.  I liked working with Flask, and wanted to keep using it if possible.  After a Google search for "flask websockets", the first solution I found was Flask-SocketIO.  It seemed robust, well-supported, and easy to use, so I went with it.  It turned out to be easy to switch from a REST API to SocketIO.  A few lines of server side code, plus some new Javascript callbacks, and it was working smoothly.</p>
+
+<p>An alternative design would have been to stick with REST, but make the requests more granular, essentially passing each client request through Python to Discogs.  Each request in the list above would go from client to server, then server to discogs.  One could argue this is more simple, since it does not involve websockets.  However, I would think performance might suffer since HTTP requests are more expensive than websocket packets.  In the end, I wanted to gain experience with websockets, so I went with that solution.</p>
+
+<h3>SocketIO vs WebSockets</h3>
+<p>I later found out that SocketIO is very different from vanilla websockets.  It provides fallback to "long polling" via HTTP if websockets can't connect.  This makes for a much heavier client library.  That's why I went with vanilla websockets for my Real Time Stock Chart project.  However, for my first excursion into websocket land, it did just fine.</p>
+
+<h3>Eventlet</h3>
+<p>If you look at the project source code you'll see the following lines in flask_app.py:</p>
+
+<pre><code>import eventlet
+eventlet.monkey_patch()
+</code></pre>
+
+<p>This enables SocketIO to provide asynchronous messaging over WebSockets.  The eventlet library enables asynchronous I/O, so that when a request comes in over the websocket, the handler runs in the background, freeing up the main thread to handle the next request.  I honestly don't know the difference between eventlet and other async libraries.  It's the first one suggested by the SocketIO documentation, and it did the job well.</p>
+
+<h3>Summary</h3>
+<p>The Complete Discography project was an interesting journey from scraping to API and back again.  The transition from HTTP/REST to WebSockets was a real eye opener, and showed me a new realm of possibilites in web development.  Even though it took much longer than I had expected, the end result was worth it.  Several friends have told me they enjoyed using the app.  So not only did I learn a lot about Python and WebSockets, I was able to provide big value in the process!  Great success!  High five!<p>
