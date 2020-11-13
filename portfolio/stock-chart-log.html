@@ -1,4 +1,4 @@
-﻿---
+---
 layout: default
 title: Development Log for Real Time Stock Chart
 ---
@@ -36,7 +36,7 @@ title: Development Log for Real Time Stock Chart
 
 <p>As you can see, the server app is handling two different things: the connection to the data source and connections with clients.  Under the hood, this is handled by two classes.  One keeps track of client connections and subscriptions.  The other handles the connection to the data source.</p>
 
-<p>Now the big question is, how do the two server classes pass messages to each other for subscribe/unsubscribe and price updates?  Since they are running in the same process, each class is able to have a reference to the other and they communicate via method calls.  The downside is that all of the websocket connections are handled by a single event loop (see <a href=”#asyncio”>AsyncIO</a>).  At a larger scale, I imagine this would be too slow.  The classes would need to be split into separate processes and communicate via a message broker such as Redis.  However, for such a small project, I think the performance should be sufficient, especially with the limitations described in the next section.</p>
+<p>Now the big question is, how do the two server classes pass messages to each other for subscribe/unsubscribe and price updates?  Since they are running in the same process, each class is able to have a reference to the other and they communicate via method calls.  The downside is that all of the websocket connections are handled by a single event loop (see <a href="#asyncio">AsyncIO</a>).  At a larger scale, I imagine this would be too slow.  The classes would need to be split into separate processes and communicate via a message broker such as Redis.  However, for such a small project, I think the performance should be sufficient, especially with the limitations described in the next section.</p>
 
 <h3>Data Source</h3>
 <p>I chose FinnHub for price and ease of use.  They offer a single websocket connection free of charge, which provides real time price changes.  The websocket may subscribe to maximum 50 symbols at one time.</p>
@@ -48,7 +48,7 @@ title: Development Log for Real Time Stock Chart
 <h3>WebSockets</h3>
 <p>For this project, I decided to try vanilla websockets, to get a feel for how this technology works without any extra layers.  It turns out that websockets are really easy to use, but I did need to learn about AsyncIO in the process.</p>
 
-<h3 id=”asyncio”>AsyncIO</h3>
+<h3 id="asyncio">AsyncIO</h3>
 <p>The Python websockets library is based on the asyncio library, so any code using websockets must also use asyncio.  The latter introduces async/await syntax to Python, much like that of Javascript.  Essentially it provides a simple way to schedule tasks to run in a background process, freeing up the main loop to handle I/O functions.</p>
 
 <p>Why is this important?  In order for websockets to work, one thread must always be waiting for new messages to show up.  This thread cannot be tied up in slow operations such as reading from a database or downloading from an API.  With asyncio, we can throw these tasks on a back burner as the main thread continues waiting for IO.  This technology is providing a foundation for many new and exciting Python libraries to grow and flourish.</p>
