@@ -1,0 +1,68 @@
+﻿---
+layout: default
+title: Development Log for Real Time Stock Chart
+---
+
+<h2>Motivation</h2>
+<p>I wanted to demonstrate the potential of websockets in Python.  A real time stock chart requires a constant stream of data, so it seemed like a perfect match.</p>
+
+<h2>Goals</h2>
+<ol>
+<li>Track the price of a stock or currency</li>
+<li>Show price updates in real time</li>
+<li>Auto-complete the names of stocks and currencies</li>
+<li>Use websockets</li>
+<li>Pass requests through a Python web application</li>
+</ol>
+
+<h2>Technologies Used</h2>
+<ul>
+<li>Python</li>
+<li>AsyncIO</li>
+<li>websockets</li>
+<li>Chart.js</li>
+<li>Autocomplete.js</li>
+<li>Fuse.js</li>
+</ul>
+
+<h2>Design Choices</h2>
+
+<h3>Overall Architecture</h3>
+<p>This app implements a client server model.  The web client opens a websocket connection to the Python-based server application.  The web client then subscribes and unsubscribes from various financial symbols (stock, currency, or crypto) and receives price updates.  Each client will subscribe to one symbol at a time.</p>
+
+<p>The server maintains a single websocket connection to the data source.  As it receives subscribe/unsubscribe requests from the client, it passes these along to the data source.  As it receives price updates from the source, it passes them along to the client.</p>
+
+<p>The server implements a subscriber model.  As clients connect and subscribe to symbols, the server adds them to a registry.  As price updates come in for a symbol, the server updates those clients which are subscribed to that symbol.  When a client disconnects, it is removed from the registry.</p>
+
+<p>As you can see, the server app is handling two different things: the connection to the data source and connections with clients.  Under the hood, this is handled by two classes.  One keeps track of client connections and subscriptions.  The other handles the connection to the data source.</p>
+
+<p>Now the big question is, how do the two server classes pass messages to each other for subscribe/unsubscribe and price updates?  Since they are running in the same process, each class is able to have a reference to the other and they communicate via method calls.  The downside is that all of the websocket connections are handled by a single event loop (see <a href=”#asyncio”>AsyncIO</a>).  At a larger scale, I imagine this would be too slow.  The classes would need to be split into separate processes and communicate via a message broker such as Redis.  However, for such a small project, I think the performance should be sufficient, especially with the limitations described in the next section.</p>
+
+<h3>Data Source</h3>
+<p>I chose FinnHub for price and ease of use.  They offer a single websocket connection free of charge, which provides real time price changes.  The websocket may subscribe to maximum 50 symbols at one time.</p>
+
+<p>This limitation provided the impetus for the client server design.  Since there can be only one websocket connection per API key, it wasn't possible to have a connection to FinnHub in the browser.  Instead, the browser connects to the Python web application as an intermediary.</p>
+
+<p>But what happens when we reach 50 symbols?  Each client will subscribe to at most one symbol.  Since this project only exists in the context of my portfolio, I am betting there will not be more than 50 clients connected at once.  If it does reach the maximum, the app displays an error message asking the user to try again later.</p>
+
+<h3>WebSockets</h3>
+<p>For this project, I decided to try vanilla websockets, to get a feel for how this technology works without any extra layers.  It turns out that websockets are really easy to use, but I did need to learn about AsyncIO in the process.</p>
+
+<h3 id=”asyncio”>AsyncIO</h3>
+<p>The Python websockets library is based on the asyncio library, so any code using websockets must also use asyncio.  The latter introduces async/await syntax to Python, much like that of Javascript.  Essentially it provides a simple way to schedule tasks to run in a background process, freeing up the main loop to handle I/O functions.</p>
+
+<p>Why is this important?  In order for websockets to work, one thread must always be waiting for new messages to show up.  This thread cannot be tied up in slow operations such as reading from a database or downloading from an API.  With asyncio, we can throw these tasks on a back burner as the main thread continues waiting for IO.  This technology is providing a foundation for many new and exciting Python libraries to grow and flourish.</p>
+
+<p>Learning how this all works has been a fascinating journey, and has made me a better developer, not only in Python but in Javascript as well.</p>
+
+<h3>Javascript Libraries</h3>
+<p>The web client makes use of the following Javascript libraries:</p>
+
+<ul>
+<li>Chart.js handles rendering the stock chart itself, as well as animation.</li>
+<li>Autocomplete.js is a lightweight solution to allow users to quickly select from a list of available financial symbols.  Just start typing and the options appear.</li>
+<li>Fuse.js provides fuzzy search.  Each time the user enters a new letter, it searches the list of financial symbols and provides a list of matches.</li>
+</ul>
+
+<h2>Summary</h2>
+<p>This project was a lot of fun.  The biggest challenges were learning the asyncio paradigm, and deciding how the two server classes would interact.  Once I mastered these, I was surprised how easily the rest of the code came together!  I’m happy with the elegant design.  It’s satisfying to see the entire server app running smoothly on a single event loop.  I hope the app is as fun to use as it was to create.</p>
