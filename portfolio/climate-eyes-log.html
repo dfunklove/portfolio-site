@@ -1,0 +1,62 @@
+---
+layout: default
+title: Development Log for Climate Eyes
+---
+
+<h2>Motivation</h2>
+<p>I wanted a way to compare weather from one year to the next, and identify climate trends.</p>
+
+<h2>Goals</h2>
+<ol>
+<li>Provide a comparison of weather between different years.</li>
+<li>Give some indication of trends in climate.</li>
+<li>Demonstrate the use of a REST API in Python.</li>
+</ol>
+
+<h2>Technologies Used</h2>
+<ul>
+<li>REST</li>
+<li>Python</li>
+<li>Flask</li>
+<li>Gunicorn</li>
+<li>Chart.js</li>
+<li>Regression.js</li>
+</ul>
+
+<h2>Design Choices</h2>
+
+<h3>Overall Architecture</h3>
+<p>The server application is written in Python and runs in Flask.  It provides a simple REST API.  The client runs in the browser, requests data from the server, and displays a graph and summary to the user.</p>
+
+<p>I chose to pass the data unchanged from Visual Crossing to the web client.  I didn't see the need to create a new data structure instead of using the one provided by VC.  Their data structure seemed well designed and easy to consume.  If it ain't broke, don't fix it.</p>
+
+<p>The client comprises the larger share of the code in this application.  This is because most of the work done by the application has to do with preparing data for display.  The server side focuses on providing data to clients quickly, and managing the <a href="#data-cap">daily data cap.</a>  Keeping the server app lean allows it to scale more easily and provide reliable performance.</p>
+
+<h3>Data Source</h3>
+<p>Visual Crossing provides a weather summary API which is perfect for this project.  Given a location, start year, and end year, it provides average temperature and other stats for each year in the range.</p>
+
+<h3>Client Design</h3>
+<p>When I found the climate tracker on the Visual Crossing site, I was impressed by the design and decided to emulate it in my application.  My intention for this project was to demonstrate a REST API, not create an original visual design.  Plus I figured the process of recreating their design would provide its own opportunities for learning.</p>
+
+<p>I researched CSS Flexbox, then realized Visual Crossing was using this same technology.  I was able to grasp the basic idea of what they were doing.  I did copy some of their CSS directly, but the HTML is all mine.  I was able to use the same Chart.js library as my Stock Chart app to create a simplified graph.  The trend line is calculated by another library, Regression.js.</p>
+
+<p>In the end, the client turned out great and even provides a new feature: a drop-down to select other statistics besides temperature.  And the lessons I learned about CSS Flexbox helped me to grow as a front end developer.</p>
+
+<h3>Gunicorn</h3>
+<p>All Flask apps require a WSGI application server to run in production.  I chose Gunicorn because it is widely adopted, simple to use, and configurable enough.  Another option would have been the Gevent server which I used in my Stock Chart app.  The uWSGI server is popular as well.  In the end, Gunicorn got the edge because it is more configurable than Gevent, without providing a plethora of options like uWSGI.  It works well out of the box, and can be tweaked later to improve performance.</p>
+
+<p>Next it was necessary to choose a worker type.  The Gunicorn docs recommend async workers for applications like mine that request data from other web services.  There are two options for async workers: gthread and aiohttp.  I chose gthread because unlike aiohttp it does not require any changes to the Flask application code.  The gthread worker spins up a new thread for each request.  Thus the number of requests is limited by the maximum number of threads, which is determined by the operating system.</p>
+
+<h2>Challenges</h2>
+<h3 id="data-cap">Daily Data Cap</h3>
+<p>The greatest challenge in creating this app was the daily data cap imposed by VisualCrossing.  Each API key may request up to 10000 records per day free of charge.  After that, there is a modest fee per result.  In our case, each year of data counts as one result.  One user making one request for data from 1970-2020 counts as 50 results.  It would only take 200 of these requests to hit the cap.  See the problem here?</p>
+
+<p>There was a clear need for the server app to keep track of the total result count, and return an error when the limit is reached.  But how to reset the count each day?  The Python threading library includes a Timer class.  I created a class called DailyQuotaTimer.  When instantiated it calls a method to reset the result count and set a timer for midnight.  The timer calls this same method, creating a new timer, so that it will run indefinitely.  The result count is stored in a "global" variable which is local to the module itself.  Each request to the API passes through a RequestFilter class which calculates the number of results the request would use, and checks this against the global result count.  If there are enough results remaining the request is allowed to go through, otherwise an error is returned to the client.</p>
+
+<h3>Time Zone Conversion</h3>
+<p>There was one small problem with the Visual Crossing API.  The documentation said it would return the time as an ISO 8601 string, the standard date-time format used by most programming languages.  However, in practice it only returns the year itself.  When I fed these years into Chart.js, it would fill in the month, day and time as Jan 1, 00:01.  This would have been fine, but it also converted the time zone, resulting in a date of Dec 31 of the previous year.  This was wreaking havoc with the graph.</p>
+
+<p>My solution was to change the date to Jan 2, which prevents the rounding error from changing the year.  One could instead choose to explicitly set the time zone before passing it to Chart.js.  However, you don't really know what the library will do with that information.  I've also learned that adjusting time zones can be tricky in any language, and doing it properly can take a while to figure out.  To me, changing the date seemed better because it was the simplest solution which satisfied the project requirements.</p>
+
+<h2>Summary</h2>
+Flask makes it easy to create and serve an API, so that part came easily.  Visual Crossing's API made it easy to find the data I needed with minimal post-processing.  While most of the development work went into the Javascript client, I did learn some interesting lessons about modules and timers in Python.  The lessons I learned here will come in handy for larger projects.
