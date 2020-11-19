@@ -43,7 +43,7 @@ title: Development Log for Climate Eyes
 <p>In the end, the client turned out great and even provides a new feature: a drop-down to select other statistics besides temperature.  And the lessons I learned about CSS Flexbox helped me to grow as a front end developer.</p>
 
 <h3>Gunicorn</h3>
-<p>All Flask apps require a WSGI application server to run in production.  I chose Gunicorn because it is widely adopted, simple to use, and configurable enough.  Another option would have been the Gevent server which I used in my Stock Chart app.  The uWSGI server is popular as well.  In the end, Gunicorn got the edge because it is more configurable than Gevent, without providing a plethora of options like uWSGI.  It works well out of the box, and can be tweaked later to improve performance.</p>
+<p>All Flask apps require a WSGI application server to run in production.  I chose Gunicorn because it is widely adopted, simple to use, and configurable enough.  I also considered gEvent (very little options) and uWSGI (a zillion options).  In the end, Gunicorn got the edge because it is more configurable than Gevent, without providing a plethora of options like uWSGI.  It works well out of the box, and can be tweaked later to improve performance.</p>
 
 <p>Next it was necessary to choose a worker type.  The Gunicorn docs recommend async workers for applications like mine that request data from other web services.  There are two options for async workers: gthread and aiohttp.  I chose gthread because unlike aiohttp it does not require any changes to the Flask application code.  The gthread worker spins up a new thread for each request.  Thus the number of requests is limited by the maximum number of threads, which is determined by the operating system.</p>
 
