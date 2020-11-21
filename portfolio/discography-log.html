@@ -43,7 +43,7 @@ title: Development Log for Complete Discography
 
 <h2>Design Choices</h2>
 <h3>Overall Architecture</h3>
-<p>One of the goals of this project was to demonstrate my use of Python so that clients can be satisfied as to my level of skill with the language.  This led to the client/server design.  The server side is a Python app which retrieves data from Discogs.com and serves it over a REST API in Flask.  The client is Javascript/HTML.  The client and server interact using WebSockets.  Now let's break it down piece by piece.</p>
+<p>One of the goals of this project was to demonstrate my use of Python so that clients can be satisfied as to my level of skill with the language.  This led to the client/server design.  The server side is a Python app which scrapes data from Discogs.com and serves it over a Websocket API.  The client is Javascript/HTML.  Now let's break it down piece by piece.</p>
 
 <h3>Data Source</h3>
 <p>I chose <a href="https://discogs.com">Discogs</a> for my data source because I consider them a dependable and respected source of data covering recorded music.  I also knew they had a public API.</p>
